@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Hello, World!</title>
+    <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+    <h1>Counter system</h1>
+    <div>
+        <h2>Guest selection</h2>
+        <p>children</p>
+        <label for="child">Enter the number of child</label>
+        <br>
+        <input type="number" id="child" min="0" value="0" placeholder="enter number of adults">
+        <p>Adults</p>
+        <label for="adult">Enter the number of Adults</label>
+        <br>
+        <input type="number" id="adult" min="0" value="0" placeholder="enter number of adults">
+        <p id="warning">allowed in single room</p>
+        <p>Total Guest :</p>
+        <span id="total">0</span>
+    </div>
+    <script type="text/javascript" charset="utf-8">
+        let childE = document.getElementById("child");
+        let adultE = document.getElementById("adult");
+        let warningE = document.getElementById("warning");
+        let totalE = document.getElementById("total");
+        let maxGuest = 5;
+        let updating = false;
+        childE.addEventListener("input", updateUI);
+        adultE.addEventListener("input", updateUI);
+        function updateUI() {
+           
+            let child = parseInt(childE.value) || 0;
+            let adult = parseInt(adultE.value) || 0;
+            let total = child + adult;
+            if (total > maxGuest) {
+                warningE.innerText = "not allowed in single room";
+                warningE.style.color = "red";
+                if(child>adult) {
+                    childE.value = maxGuest-adult;
+                } else {
+                    adultE.value= maxGuest-child;
+                }
+            } else{
+                warningE.innerText="allowed in single room";
+                warningE.style.color="green";
+            }
+            child =parseInt(childE.value)||0;
+            adult =parseInt(adultE.value)||0;
+            total=child+adult;
+            totalE.innerText=total
+            
+        }
+    </script>
+</body>
+
+</html>

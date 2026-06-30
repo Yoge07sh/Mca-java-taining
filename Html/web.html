@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <h1>Calculator</h1>
+    <input type="number" id="num1" placeholder="enter the first number">
+    <input type="number" name="" id="num2" placeholder="enter the second number">
+    <p id="Result">0</p>
+    <button id="add">+</button>
+    <button id="sub">-</button>
+    <button id="mul">x</button>
+    <button id="div">/</button>
+    <ul id="list"></ul>
+    <button id="clear">Clear History</button>
+    <script>
+        let n1 = document.getElementById("num1");
+        let n2 = document.getElementById("num2");
+        let result = document.getElementById("Result");
+        let lastop = "+";
+        let history = [];
+        let localS = localStorage.getItem("history");
+        if (localS) {
+            history = JSON.parse(localS);
+            hist();
+        }
+        function Calculator(operator) {
+            lastop = operator;
+            let i1 = Number(n1.value);
+            let i2 = Number(n2.value);
+            if (isNaN(i1) || isNaN(i2)) {
+                result.innerText = "Numbers are invalid";
+                return;
+            }
+            let ans = 0;
+            if (operator === "+") {
+                ans = i1 + i2;
+            } else if (operator === "-") {
+                ans = i1 - i2;
+            } else if (operator === "x") {
+                ans = i1 * i2;
+            } else if (operator === "/") {
+                if (i2 === 0) {
+                    result.innerText = "Division is not possible";
+                    return;
+                }
+                ans = i1 / i2;
+            }
+            n1.value = "";
+            n2.value = "";
+            history.push(`${i1} ${operator} ${i2} = ${ans}`);
+            result.innerText = `${i1} ${operator} ${i2} = ${ans}`;
+            if (history.length > 5) {
+                history.shift();
+            }
+            localStorage.setItem("history", JSON.stringify(history));
+            hist();
+        }
+        n1.addEventListener("keydown", function (e) {
+            if (e.key === "Enter") {
+                n2.focus();
+            }
+        });
+        n2.addEventListener("keydown", handleEnter);
+        function handleEnter(e) {
+            if (e.key === "Enter") {
+                Calculator(lastop);
+            }
+        }
+        document.addEventListener("keydown", function (e) {
+            if (e.target.tagName === "INPUT") return;
+            if (e.key === "+") Calculator("+");
+            else if (e.key === "-") Calculator("-");
+            else if (e.key === "*") Calculator("x");
+            else if (e.key === "/") Calculator("/");
+        });
+        function hist() {
+            const list = document.getElementById("list");
+            list.innerHTML = "";
+            history.forEach((item, index) => {
+                let li = document.createElement("li");
+                let text = document.createElement("span");
+                text.textContent = item;
+                let delbtn = document.createElement("button");
+                delbtn.textContent = "Delete";
+                delbtn.addEventListener("click", () => {
+                    history.splice(index, 1);
+                    localStorage.setItem("history", JSON.stringify(history));
+                    hist();
+                });
+                li.appendChild(text);
+                li.appendChild(delbtn);
+                list.appendChild(li);
+            });
+
+
+        }
+        document.getElementById("clear").addEventListener("click", () => {
+            history = [];
+            localStorage.removeItem("history");
+            document.getElementById("list").innerHTML = "";
+        });
+        document.getElementById("add").addEventListener("click", () => Calculator("+"));
+        document.getElementById("sub").addEventListener("click", () => Calculator("-"));
+        document.getElementById("mul").addEventListener("click", () => Calculator("x"));
+        document.getElementById("div").addEventListener("click", () => Calculator("/"));
+    </script>
+</body>
+
+</html>

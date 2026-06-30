@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <h2>Hotel Booking</h2>
+
+    <form id="bookingForm">
+        <input type="text" id="name" placeholder="Enter your name" required>
+
+        <input type="number" id="guests" placeholder="Number of guests" required>
+
+        <select id="room">
+            <option value="Standard">Standard</option>
+            <option value="Deluxe">Deluxe</option>
+            <option value="Suite">Suite</option>
+        </select>
+
+        <button type="submit">Book Now</button>
+    </form>
+
+    <p id="result"></p>
+    <ul id="list"></ul>
+    <button id="del">clear</button>
+    <button id="delAll">clear All</button>
+    <script>
+        let form = document.getElementById("bookingForm");
+        let result = document.getElementById("result");
+        let list = document.getElementById("list");
+        let btn = document.getElementById("del");
+        let btn1 = document.getElementById("delAll");
+        let bookings = [];
+        form.addEventListener("submit", function (event) {
+            event.preventDefault();
+            let name = document.getElementById("name").value;
+            let guests = document.getElementById("guests").value;
+            let room = document.getElementById("room").value;
+            if (name === "" || guests <= 0) {
+                result.textContent = "plz enter valid datails";
+                return;
+            }
+            let booking = {
+                id: Date.now(),
+                name: name,
+                guests: guests,
+                room: room,
+            };
+            bookings.push(booking);
+            // li.textContent ="booking details for"+" "+name+" "+"with total members"+" "+guests+"with"+room+".";
+            let li = document.createElement("li");
+            li.textContent = `${name}-${guests}-${room}`;
+            let btn2 = document.createElement("button");
+            btn2.textContent = " Delete";
+            let edit = document.getElementById("button");
+            edit.textContent = "Edit";
+            edit.addEventListener("click", function () {
+                let newName = prompt("enter the new name", booking.name);
+                if (newName && newName != "") {
+                    booking.name = newName;
+                }
+                let editGuests = prompt("enter total guests", booking.guests);
+                if (editGuests && editGuests > 0) {
+                    booking.guests = editGuests;
+                }
+                let editRoom = prompt("select room type", booking.room);
+                if (editRoom && (editRoom === "Standard" || editRoom === "Deluxe" || editRoom === "Suite")) {
+                    booking.room = editRoom;
+                }
+                result.textContent="booking updated";
+            })
+            btn2.addEventListener("click", function () {
+
+                const index = bookings.findIndex(b => b.id === booking.id);
+                if (index !== -1) {
+                    bookings.splice(index, 1);
+                }
+
+
+                li.remove();
+            });
+            li.appendChild(btn2);
+            list.appendChild(li);
+
+            result.textContent = "booking added";
+            form.reset();
+        });
+        btn.addEventListener("click", function () {
+            bookings.pop();
+            if (list.children.length > 0) {
+                list.removeChild(list.lastElementChild);
+            }
+        });
+        btn1.addEventListener("click", function () {
+            bookings = [];
+            if (list.children.length > 0) {
+                list.innerHTML = "";
+            }
+        });
+        function display() {
+            if (bookings.length === 0) {
+                console.log("no bookings available");
+                return;
+            }
+            for (let i = 0; i < bookings.length; i++) {
+                console.log(`${i + 1}. Name: ${bookings[i].name}, guests: ${bookings[i].guests}, room: ${bookings[i].room}`);
+            }
+        }
+        let showBtn = document.createElement("button");
+        showBtn.textContent = "ShowBookings"
+        showBtn.addEventListener("click", function () {
+            display();
+        });
+        document.body.appendChild(showBtn);
+
+
+    </script>
+</body>
+
+</html>
