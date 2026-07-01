@@ -87,8 +87,8 @@ function getTicket(cinemaName) {
 }
 async function movieSummary() {
     try {
-        let movie = await getmovie(101)
-        let cinemas = await getCinemas(movie.movieId)
+        let movie = await getmovie(101)    
+        let cinemas = await getCinemas(movie.movieId) 
         let ticket = await getTicket(cinemas[0].hallName)
         console.log(ticket);
     } catch (err) {
