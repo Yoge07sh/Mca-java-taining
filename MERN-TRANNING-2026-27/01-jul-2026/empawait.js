@@ -94,11 +94,11 @@ const salarySummary = async()=> {
     try {
         let emp = await getEmp(105);
         console.log(emp);
-        let basicsalary = await getBasicSalary(emp.post);
+        let basicsalary = await getBasicSalary(emp.empPost);
         console.log(basicsalary);
         let HRA = await getHRA(basicsalary);
         console.log(HRA);
-        let finalsalary = await calculateSalary(HRA, basicsalary);
+        let finalsalary = await calculateSalary(basicsalary,HRA);
         console.log(finalsalary);
 
     } catch (err) {
